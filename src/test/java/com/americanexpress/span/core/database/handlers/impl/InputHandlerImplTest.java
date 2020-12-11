@@ -14,10 +14,12 @@
 package com.americanexpress.span.core.database.handlers.impl;
 
 import com.americanexpress.span.annotation.Field;
+import com.americanexpress.span.constants.SPANTestConstants;
 import com.americanexpress.span.core.SPANConfigHolderTest;
 import com.americanexpress.span.core.SPANInitialization;
 import com.americanexpress.span.core.database.handlers.FieldTransformation;
 import com.americanexpress.span.core.database.handlers.InputHandler;
+import com.americanexpress.span.utility.PropertyConfiguration;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -174,7 +176,13 @@ public class InputHandlerImplTest {
     @BeforeClass
     public static void beforeClass() throws IOException, IllegalAccessException, NoSuchFieldException, ClassNotFoundException {
         SPANConfigHolderTest.resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("SPANConfig.yaml");
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.SPAN_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
     }
 
     @Test

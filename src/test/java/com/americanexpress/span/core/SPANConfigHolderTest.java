@@ -13,10 +13,12 @@
  */
 package com.americanexpress.span.core;
 
+import com.americanexpress.span.constants.SPANTestConstants;
 import com.americanexpress.span.models.DataSourceDetails;
 import com.americanexpress.span.models.SPANConfig;
 import com.americanexpress.span.models.SPANUserDefineKeyDetails;
 import com.americanexpress.span.models.SPUserDefineKey;
+import com.americanexpress.span.utility.PropertyConfiguration;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
@@ -30,7 +32,13 @@ public class SPANConfigHolderTest {
     @Test
     public void testSPANConfigLoader() throws Exception {
         resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("SPANConfig.yaml");
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.SPAN_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return null;}
+        });
 
         SPANConfig spanConfig = SPANConfigHolder.getInstance().getSPANConfig();
 
@@ -44,7 +52,13 @@ public class SPANConfigHolderTest {
     @Test
     public void testSPANConfigHolderDataSource() throws Exception {
         resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("SPANConfig.yaml");
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.SPAN_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
 
         DataSourceDetails dataSourceDetails = SPANConfigHolder.getInstance().getDataSourceDetails("PROC_ID_1");
 
@@ -60,7 +74,13 @@ public class SPANConfigHolderTest {
     public void testSPANConfigHolderSPUserName() throws Exception {
 
         resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("SPANConfig.yaml");
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.SPAN_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
 
         SPUserDefineKey spUserDefinedKey = SPANConfigHolder.getInstance().getSPUserDefinedKey("PROC_ID_1");
 
@@ -75,7 +95,13 @@ public class SPANConfigHolderTest {
     public void testSPDetails() throws Exception {
 
         resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("SPANConfig.yaml");
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.SPAN_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
 
         SPUserDefineKey spUserDefinedKey = SPANConfigHolder.getInstance().getSPUserDefinedKey("PROC_ID_1");
 
@@ -90,7 +116,13 @@ public class SPANConfigHolderTest {
     public void testSPANUserDefineKeyDetails() throws Exception {
 
         resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("SPANConfig.yaml");
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.SPAN_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
 
         Map<String, SPANUserDefineKeyDetails> spUserDefinedKey = SPANConfigHolder.getInstance().getSPANConfig().getSpanUserDefineKeys();
 
@@ -99,8 +131,6 @@ public class SPANConfigHolderTest {
 
 
     }
-
-
 
     public static void resetHoldSPANConfigForTesting() throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException {
         Field field = Class.forName("com.americanexpress.span.core.SPANConfigHolder$HoldSPANConfig").getDeclaredField("holdSPANConfig");

@@ -13,10 +13,9 @@
  */
 package com.americanexpress.span.core;
 
-import com.americanexpress.span.constants.SPANConstants;
 import com.americanexpress.span.exceptions.ConfigurationSPANException;
 import com.americanexpress.span.models.SPANConfig;
-import com.americanexpress.span.utility.SPANUtility;
+import com.americanexpress.span.utility.PropertyConfiguration;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -33,39 +32,39 @@ public final class SPANInitialization {
 
     private SPANInitialization(){}
 
-    private static final String APP_PROFILE = "APP_PROFILE";
+    private static PropertyConfiguration propertyConfiguration= null;
+
     private static final String DEFAULT_FILE_NAME = "SPANConfig";
     private static final String YAML = ".yaml";
 
     /**
      * Loads the given yaml file into SPANConfig object. If no fileName given, loads the default file.
      *
-     * @param fileName
+     * @param configuration
      * @throws ConfigurationSPANException
      */
-    public static final void initialize(String fileName) {
-
-        if (StringUtils.isEmpty(fileName)) {
+    public static final void initialize(PropertyConfiguration configuration) {
+        propertyConfiguration = configuration;
+        if (Objects.isNull(propertyConfiguration) || StringUtils.isEmpty(propertyConfiguration.getFileName())) {
             initialize();
         } else {
             //Load the configuration file.
-            loadSPANConfig(fileName);
+            loadSPANConfig(propertyConfiguration.getFileName());
         }
 
     }
 
     /**
-     * Loads the file SPANConfig-${APP_PROFILE}.yaml. If APP_PROFILE is not found, loads the default SPANConfig.yaml file.
+     * If the application profile is provided, it would load the file SPANConfig-{application profile}.yaml. If the application profile is not provided, loads the default SPANConfig.yaml file.
      *
      * @throws ConfigurationSPANException
      */
     public static final void initialize() {
 
         String fileName = null;
-        String envProperty = SPANUtility.getEnvProperty(APP_PROFILE).orElse(SPANConstants.EMPTY_STRING);
 
-        if (StringUtils.isNotEmpty(envProperty)) {
-            fileName = DEFAULT_FILE_NAME + "-" + envProperty + YAML;
+        if (Objects.nonNull(propertyConfiguration) && StringUtils.isNotEmpty(propertyConfiguration.getAppProfile())) {
+            fileName = DEFAULT_FILE_NAME + "-" + propertyConfiguration.getAppProfile() + YAML;
         } else {
             fileName = DEFAULT_FILE_NAME + YAML;
         }
@@ -73,7 +72,6 @@ public final class SPANInitialization {
         loadSPANConfig(fileName);
 
     }
-
 
     /**
      * Load the YAML file and set the SPANConfig object

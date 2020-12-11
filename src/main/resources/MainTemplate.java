@@ -24,12 +24,18 @@ public class Main {
     private static final String SP_ID = "%SP_ID%";
 
     public static void main(String[] args) throws SQLException {
-        SPANInitialization.initialize(SPAN_CONFIG);
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPAN_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConfigurationConstants.EMPTY_STRING;}
+        });
 
         SPInput spInput = new SPInput();
 %SPINPUT_FIELDS%
 
-        SPOutput spOutput = new SPExecutor().execute(SP_ID, spInput, SPOutput.class);
+                SPOutput spOutput = new SPExecutor().execute(SP_ID, spInput, SPOutput.class);
 
         System.out.println("Stored Procedure Output...");
         System.out.println("--------------------------");

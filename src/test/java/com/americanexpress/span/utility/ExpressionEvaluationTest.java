@@ -13,6 +13,7 @@
  */
 package com.americanexpress.span.utility;
 
+import com.americanexpress.span.constants.SPANTestConstants;
 import com.americanexpress.span.core.SPANInitialization;
 import com.americanexpress.span.exceptions.SPANException;
 import junit.framework.TestCase;
@@ -83,8 +84,13 @@ public class ExpressionEvaluationTest extends TestCase {
     @Test
     public void testEvaluateExpressionEveluationStringFromSystemPropertiesFile() throws SPANException, ClassNotFoundException, IllegalAccessException, NoSuchFieldException {
         resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("SampleSPANConfigWithProperties.yaml");
-
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.SAMPLE_SPAN_CONFIG_WITH_PROPERTIES;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
         String expression = "${databasepassword}";
         String result = expressionEvaluation.evaluate(expression);
         assertEquals(result, "test123");

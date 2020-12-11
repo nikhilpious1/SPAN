@@ -13,9 +13,11 @@
  */
 package com.americanexpress.span.core.database.connection;
 
+import com.americanexpress.span.constants.SPANTestConstants;
 import com.americanexpress.span.core.SPANConfigHolder;
 import com.americanexpress.span.core.SPANInitialization;
 import com.americanexpress.span.models.SPANConfig;
+import com.americanexpress.span.utility.PropertyConfiguration;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -42,8 +44,13 @@ public class SPANDataSourceTest {
     public void testInitialize() throws Exception {
         resetHoldSPANConfigForTesting();
 
-        SPANInitialization.initialize("SPANConfig.yaml");
-        SPANConfig actualOutput = SPANConfigHolder.getInstance().getSPANConfig();
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.SPAN_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });        SPANConfig actualOutput = SPANConfigHolder.getInstance().getSPANConfig();
         SPANConfig expectedOutput = expectedOutput();
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -56,16 +63,26 @@ public class SPANDataSourceTest {
     public void testInitializeWithWrongDriverClass() throws Exception {
         resetHoldSPANConfigForTesting();
 
-        SPANInitialization.initialize("SPANConfigWithWrongDriverClass.yaml");
-        SPANDataSource.getInstance();
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.SPAN_CONFIG_WITH_WRONG_DRIVER_CLASS;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });        SPANDataSource.getInstance();
 
     }
 
     @Test()
     public void testInitializeWithDriverClass() throws Exception {
         resetHoldSPANConfigForTesting();
-
-        SPANInitialization.initialize("SPANConfigWithDriverClass.yaml");
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.SPAN_CONFIG_WITH_DRIVER_CLASS;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
         Assert.assertNotNull(SPANDataSource.getInstance());
 
     }

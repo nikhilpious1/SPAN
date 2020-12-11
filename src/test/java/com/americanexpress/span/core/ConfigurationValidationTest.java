@@ -13,7 +13,9 @@
  */
 package com.americanexpress.span.core;
 
+import com.americanexpress.span.constants.SPANTestConstants;
 import com.americanexpress.span.exceptions.ConfigurationSPANException;
+import com.americanexpress.span.utility.PropertyConfiguration;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -29,95 +31,178 @@ public class ConfigurationValidationTest {
     @Test(expected = ConfigurationSPANException.class)
     public void testDatasourceDetailsNoResult() throws Exception {
         resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("NoDatasourceDetailsConfig.yaml");
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.NO_DATA_SOURCE_DETAILS_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
     }
 
 
     @Test(expected = ConfigurationSPANException.class)
     public void testHostNameNoResult() throws Exception {
         resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("NoHostNameConfig.yaml");
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.NO_HOST_NAME_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
     }
 
 
     @Test(expected = ConfigurationSPANException.class)
     public void testPortNoResult() throws Exception {
         resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("NoPortConfig.yaml");
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.NO_PORT_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
     }
 
 
     @Test(expected = ConfigurationSPANException.class)
     public void testDatabaseNoResult() throws Exception {
         resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("NoDatabaseConfig.yaml");
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.NO_DATABASE_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
     }
 
 
     @Test(expected = ConfigurationSPANException.class)
     public void testUserNoResult() throws Exception {
         resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("NoUserConfig.yaml");
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.NO_USER_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
     }
 
 
     @Test(expected = ConfigurationSPANException.class)
     public void testPasswordNoResult() throws Exception {
         resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("NoPasswordConfig.yaml");
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.NO_PASSWORD_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
     }
 
 
     @Test(expected = ConfigurationSPANException.class)
     public void testSPDetailsNoResult() throws Exception {
         resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("NoSpUserDefinedKeysConfig.yaml");
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.NO_SP_USER_DEFINED_KEYS_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
     }
 
 
     @Test(expected = ConfigurationSPANException.class)
     public void testSpSchemaNoResult() throws Exception {
         resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("NoSpSchemaConfig.yaml");
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.NO_SP_SCHEMA_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
     }
 
 
     @Test(expected = ConfigurationSPANException.class)
     public void testSpProcedureNoResult() throws Exception {
         resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("NoSpProcedureConfig.yaml");
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.NO_SP_PROCEDURE_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
     }
 
     @Test
     public void testWithURl() throws Exception {
         resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("SPANConfigWithURL.yaml");
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.SPAN_CONFIG_WITH_URL;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
         Assert.assertNotNull(SPANConfigHolder.getInstance().getSPANConfig());
     }
 
     @Test(expected = ConfigurationSPANException.class)
     public void testWithURlWithHostName() throws Exception {
         resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("SPANConfigWithURLWithHostName.yaml");
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.SPAN_CONFIG_WITH_URL_AND_HOSTNAME;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
     }
 
     @Test(expected = ConfigurationSPANException.class)
     public void testWithURlWithPort() throws Exception {
         resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("SPANConfigWithURLWithPort.yaml");
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.SPAN_CONFIG_WITH_URL_AND_PORT;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
     }
 
     @Test(expected = ConfigurationSPANException.class)
     public void testWithURlWithDatabase() throws Exception {
         resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("SPANConfigWithURLWithDatabase.yaml");
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.SPAN_CONFIG_WITH_URL_AND_DATABASE;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
     }
 
     @Test(expected = ConfigurationSPANException.class)
     public void testSpUserKeyDuplicate() throws Exception {
         resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("DuplicateSPUserKeyUnderDiffSPANKeyConfig.yaml");
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.DUPLICATE_SP_USER_KEY_UNDER_DIFF_SPAN_KEY_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
     }
 
 }
-

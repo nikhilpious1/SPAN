@@ -13,9 +13,11 @@
  */
 package com.americanexpress.span.core;
 
+import com.americanexpress.span.constants.SPANTestConstants;
 import com.americanexpress.span.exceptions.ConfigurationSPANException;
 import com.americanexpress.span.exceptions.SPANException;
 import com.americanexpress.span.models.SPANConfig;
+import com.americanexpress.span.utility.PropertyConfiguration;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.EnvironmentVariables;
@@ -32,8 +34,13 @@ public class SPANInitializationTest {
     @Test
     public void testInitializeSPANConfig() throws Exception {
         SPANConfigHolderTest.resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("SampleSPANConfig.yaml");
-
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.SAMPLE_SPAN_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
         SPANConfig spanConfig = SPANConfigHolder.getInstance().getSPANConfig();
 
         assertEquals(2,spanConfig.getSpanUserDefineKeys().size());
@@ -54,8 +61,13 @@ public class SPANInitializationTest {
     @Test
     public void testInitializeSPANConfigWithDatabaseProperties() throws Exception {
         SPANConfigHolderTest.resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("SampleSPANConfigWithDatabaseProperties.yaml");
-
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.SAMPLE_SPAN_CONFIG_WITH_DATABASE_PROPERTIES;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
         SPANConfig spanConfig = SPANConfigHolder.getInstance().getSPANConfig();
 
         assertEquals("select 1",spanConfig.getSpanUserDefineKeys().get("SPAN-EMPLOYEE").getDataSourceDetails().getValidationQuery());
@@ -72,36 +84,61 @@ public class SPANInitializationTest {
     @Test(expected = SPANException.class)
     public void testInitializeInvalidSPANConfig() throws Exception {
         SPANConfigHolderTest.resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("InvalidSPANConfig.yaml");
-
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.INVALID_SPAN_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
     }
 
     @Test(expected = Exception.class)
     public void testInitializeNoFileSPANConfig() throws Exception {
         SPANConfigHolderTest.resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("NoFileSPANConfig.yaml");
-
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.NO_FILE_SPAN_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
     }
 
     @Test(expected = ConfigurationSPANException.class)
     public void testInitializeSPANConfigVailidationFailure() throws Exception {
         SPANConfigHolderTest.resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("SPANConfigNoHostName.yaml");
-
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.SPAN_CONFIG_NO_HOSTNAME;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
     }
 
     @Test
     public void testInitializeDuplicateSPANUserKeySPANConfig() throws Exception {
         SPANConfigHolderTest.resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("DuplicateSPANUserKeyConfig.yaml");
-
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.DUPLICATE_SPAN_USER_KEY_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
     }
 
     @Test
     public void testInitializeDuplicateSPUserKeySPANConfig() throws Exception {
         SPANConfigHolderTest.resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("DuplicateSPUserKeyConfig.yaml");
-
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.DUPLICATE_SP_USERKEY_CONFIG;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
     }
 
     @Test
@@ -109,7 +146,35 @@ public class SPANInitializationTest {
         SPANConfigHolderTest.resetHoldSPANConfigForTesting();
 
 
-        SPANInitialization.initialize(null);
+        SPANInitialization.initialize(() -> null);
+
+        SPANConfig spanConfig = SPANConfigHolder.getInstance().getSPANConfig();
+
+        assertEquals(2,spanConfig.getSpanUserDefineKeys().size());
+        assertEquals("DB1",spanConfig.getSpanUserDefineKeys().get("SPAN-DB_ID_1").getDataSourceDetails().getDatabase());
+
+    }
+
+    @Test
+    public void testInitializeSPANWithNullPropertyConfig() throws Exception {
+        SPANConfigHolderTest.resetHoldSPANConfigForTesting();
+
+
+        SPANInitialization.initialize( null);
+
+        SPANConfig spanConfig = SPANConfigHolder.getInstance().getSPANConfig();
+
+        assertEquals(2,spanConfig.getSpanUserDefineKeys().size());
+        assertEquals("DB1",spanConfig.getSpanUserDefineKeys().get("SPAN-DB_ID_1").getDataSourceDetails().getDatabase());
+
+    }
+
+    @Test
+    public void testInitializeSPANWithAppProfile() throws Exception {
+        SPANConfigHolderTest.resetHoldSPANConfigForTesting();
+
+        String appProfile = "test";
+        SPANInitialization.initialize( () -> appProfile);
 
         SPANConfig spanConfig = SPANConfigHolder.getInstance().getSPANConfig();
 
@@ -122,8 +187,13 @@ public class SPANInitializationTest {
     @Test
     public void testInitializeSPANConfigWithProperties() throws Exception {
         SPANConfigHolderTest.resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("SampleSPANConfigWithProperties.yaml");
-
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.SAMPLE_SPAN_CONFIG_WITH_PROPERTIES;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
         SPANConfig spanConfig = SPANConfigHolder.getInstance().getSPANConfig();
 
         assertEquals(2,spanConfig.getSpanUserDefineKeys().size());
@@ -145,8 +215,13 @@ public class SPANInitializationTest {
     @Test(expected = ConfigurationSPANException.class)
     public void testInitializeSPANConfigWithWrongPropertiesPath() throws Exception {
         SPANConfigHolderTest.resetHoldSPANConfigForTesting();
-        SPANInitialization.initialize("SampleSPANConfigWithWrongPropertiesPath.yaml.yaml");
-
+        SPANInitialization.initialize(new PropertyConfiguration() {
+            public String getFileName(){
+                return SPANTestConstants.SAMPLE_SPAN_CONFIG_WITH_WRONG_PROPERTIES_PATH;
+            }
+            @Override
+            public String getAppProfile() { return SPANTestConstants.EMPTY_STRING;}
+        });
         SPANConfig spanConfig = SPANConfigHolder.getInstance().getSPANConfig();
 
     }
